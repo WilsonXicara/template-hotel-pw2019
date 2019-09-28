@@ -8,6 +8,8 @@ $font-secondary: 'Playfair Display',Georgia, serif;
 $white: #fff;
 $black: #404044;
 
+$primary: orange;
+
 @mixin border-radius($radius) {
   -webkit-border-radius: $radius;
      -moz-border-radius: $radius;

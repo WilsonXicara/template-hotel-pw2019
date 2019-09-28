@@ -8,7 +8,7 @@ var uglify = require('gulp-uglify');
 
 // Convert SCSS files to CSS
 
-gulp.task('sass', function() {
+gulp.task('sass', ['combine-css'], function() {
     return gulp.src([
             'src/scss/*.scss'
         ])
@@ -40,16 +40,28 @@ gulp.task('js', function() {
         .pipe(concat('scripts.js'))
         .pipe(gulp.dest('dist/js'))
         .pipe(rename('scripts.min.js'))
-        .pipe(uglify())
+        .pipe(uglify())     // Permite hacer la minificación de JavaScript
         .pipe(gulp.dest('dist/js'))
         .pipe(browserSync.stream());
+});
+
+/**
+ * Unir todos los archivos CSS en uno solo
+ * Toma de https://stackoverflow.com/questions/37133297/combine-all-sass-files-into-a-single-file#answer-53011947
+ */
+gulp.task('combine-css', function() {
+    // Toma todos los archivos SCSS y los combina en uno solo, en una carpeta temporal
+    console.log('==> INICIANDO LA COMBINACIÓN DE ARCHIVOS SCSS');
+    return gulp.src('./dist/css/*.css')               // Ruta de todos los archivos SCSS
+        .pipe(concat('global-style.css'))  // Combinación en un solo archivo
+        .pipe(gulp.dest('./temp/css'));    // Guardando en el directorio temporal
 });
 
 // Local server
 
 gulp.task('serve', ['sass'], function() {
     browserSync.init({
-        server: './dist'
+        server: './dist'    // Directorio donde está el root de nuestro sitio
     });
 });
 
